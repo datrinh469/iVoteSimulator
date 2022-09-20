@@ -1,18 +1,23 @@
 import java.util.Arrays;
+import java.util.Random;
+import Students.*;
 
 public class SimulationDriver {
+    private static String[] questionsList = {"What is the capital of _________?", "Select all that are true.",
+            "Which Arknights character is the best waifu?"};
     private static String[][] freeAnswersList = {{"Right", "Wrong"}, {"True", "False"}};
+    private static Random random = new Random();
+
     public static void main(String[] args) {
         Question question = new Question();
-        question.setAnswers(freeAnswersList[1]);
+        question.setQuestion(questionsList[random.nextInt(questionsList.length)]);
+        if(random.nextInt(2) == 1) {
+            question.setAnswers(random.nextInt(24)+1);
+        }
+        else {
+            question.setAnswers(freeAnswersList[random.nextInt(freeAnswersList.length)]);
+        }
+        System.out.println(question.getQuestion());
         System.out.println(Arrays.toString(question.getAnswers()));
-
-        Student student = new Student(321438292);
-        student.setAnswers(false, new int[]{0, 1, 1, 1, 0, 1, 0});
-        System.out.print("Student ID: " + student.getStudentID() + "\nAnswer: ");
-        int[] temp = student.getAnswers();
-        for(int i = 0; i < temp.length; i++)
-            System.out.print(temp[i] + " ");
-        System.out.println();
     }
 }
