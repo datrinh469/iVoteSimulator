@@ -10,10 +10,10 @@ public class VotingService {
     /**
      * Constructor for class, chooses between two ArrayLists depending on whether multiple answers are allowed
      * @param multiAnswerAllowed Boolean that checks if multiple answers will be allowed.
-     * @param listOfAnswers String array that contains all the answer options.
+     * @param listOfAnswersLength int that holds the length of the list of answers array.
      */
-    public VotingService(boolean multiAnswerAllowed, String[] listOfAnswers) {
-        answersAndNumOfVotes = new int[listOfAnswers.length];
+    public VotingService(boolean multiAnswerAllowed, int listOfAnswersLength) {
+        answersAndNumOfVotes = new int[listOfAnswersLength];
         this.multiAnswerAllowed = multiAnswerAllowed;
 
         if(multiAnswerAllowed)
@@ -47,7 +47,7 @@ public class VotingService {
         Pair<Integer, Integer> temp;
 
         // If the student already answered, remove the old pair from the array list.
-        studentsAnswers.removeIf(student -> student.getKey() == studentID);
+        studentsAnswer.removeIf(student -> student.getKey() == studentID);
 
         temp = new Pair<>(studentID, answer);
         // Adds new pair to list.
@@ -59,7 +59,7 @@ public class VotingService {
      * @return int array containing number of votes for each answer whose indices correlate with index of questions
      * array.
      */
-    public int[] compileAnswers() {
+    public void compileAnswers() {
         if(multiAnswerAllowed) {
             for (Pair<Integer, boolean[]> student : studentsAnswers) {
                 boolean[] answers = student.getValue();
@@ -74,6 +74,28 @@ public class VotingService {
                 answersAndNumOfVotes[student.getValue()]++;
             }
         }
-        return answersAndNumOfVotes;
+    }
+
+    /**
+     * Displays the answer options with how many students selecting that answer.
+     * @param answerOptions String array containing all the answer choices.
+     */
+    public void displayAnswers(String[] answerOptions) {
+        for(int i = 0; i < answerOptions.length; i++)
+            System.out.printf("%-20s: " + answersAndNumOfVotes[i] + "\n", answerOptions[i]);
+    }
+
+    /**
+     * Displays all the unique student IDs that submitted their answers
+     */
+    public void displayStudentIDs() {
+        if(multiAnswerAllowed) {
+            for (Pair<Integer, boolean[]> student:studentsAnswers)
+                System.out.println(student.getKey());
+        }
+        else {
+            for (Pair<Integer, Integer> student:studentsAnswer)
+                System.out.printf("%09d\n",student.getKey());
+        }
     }
 }
